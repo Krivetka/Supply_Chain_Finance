@@ -1,43 +1,43 @@
 # Code Review — `invoice-list.component.ts` (Part 3)
 
-> Статус: **каркас**. Наполнение — следующий шаг.
-> Оригинал: [`legacy/invoice-list.component.ts`](./legacy/invoice-list.component.ts)
-> Фиксы: [`refactor/invoice-list.component.ts`](./refactor/invoice-list.component.ts)
+> Status: **skeleton**. Content is the next step.
+> Original: [`legacy/invoice-list.component.ts`](./legacy/invoice-list.component.ts)
+> Fixes: [`refactor/invoice-list.component.ts`](./refactor/invoice-list.component.ts)
 
-## Как читать этот ревью
+## How to read this review
 
-_TODO: короткое вступление про то, что оценивалось и в каком порядке._
+_TODO: short intro on what was assessed and in what order._
 
-## Blockers (чинить до мёржа)
+## Blockers (must fix before merge)
 
-_TODO: 1-3 пункта. Security / корректность / нарушение контрактов._
+_TODO: 1-3 items. Security / correctness / contract violations._
 
-## Major (нужно чинить, но можно отдельным PR)
+## Major (should fix, can go in a separate PR)
 
-_TODO: 2-4 пункта. Типы, стейт, RxJS-паттерны, DX._
+_TODO: 2-4 items. Types, state, RxJS patterns, DX._
 
 ## Minor / cleanup
 
-_TODO: стилистика, dead code, зависимости, тесты._
+_TODO: style, dead code, dependencies, tests._
 
-## Порядок фиксов
+## Fix order
 
-_TODO: как я бы разбил на PR-цепочку и почему._
+_TODO: how I would split this into a PR chain and why._
 
 ---
 
-## Показательный рефакторинг
+## Illustrative refactor
 
-Из всех проблем беру две худшие и показываю фикс. Полностью компонент не переписываю — цель показать, что incremental fix возможен без дестабилизации приложения.
+Picking the two worst issues and showing the fix. Not rewriting the whole component — the goal is to demonstrate an incremental fix without destabilising the app.
 
 ### Fix #1: _TODO — title_
 
-_TODO: описание проблемы + ссылка на diff в `refactor/`._
+_TODO: problem description + link to the diff in `refactor/`._
 
 ### Fix #2: _TODO — title_
 
-_TODO: описание проблемы + ссылка на diff в `refactor/`._
+_TODO: problem description + link to the diff in `refactor/`._
 
-## Ограничение
+## Caveat
 
-Файлы в [`refactor/`](./refactor/) — reference-quality: они должны *читаться* как валидный Angular-код, но не запускаются как есть (Part 1 workspace ещё не поднят). Когда появится workspace — эти файлы туда переезжают без изменений.
+Files in [`refactor/`](./refactor/) are reference-quality: they should *read* as valid Angular code but are not runnable as-is (Part 1 workspace is not set up yet). Once the workspace exists, the files can be moved in unchanged.

@@ -1,19 +1,19 @@
 # Architecture Notes (Part 2)
 
-> Статус: **каркас**. Контент будет добавлен после Part 3.
+> Status: **skeleton**. Content to be filled in after Part 3.
 
-## 1. Зачем split на `data-access` / `util` / `feature` / `ui`?
+## 1. Why split into `data-access` / `util` / `feature` / `ui`?
 
-_TODO: короткое обоснование + один конкретный баг, который предотвращает правило «ui не импортит сервисы»._
+_TODO: short rationale + one concrete bug that the "ui imports no services" rule prevents._
 
-## 2. Global store vs SignalStore vs local signal — правило большого пальца
+## 2. Global store vs SignalStore vs local signal — rule of thumb
 
-_TODO: где в этой фиче что живёт, где команды обычно ошибаются._
+_TODO: where each lives in this feature, where teams usually get it wrong._
 
-## 3. Что меняется в коде без Zone.js? Что ломается при zoneless-миграции легаси?
+## 3. What changes in this code with Zone.js gone? What breaks during a zoneless migration of a legacy app?
 
-_TODO: конкретные точки боли + как их найти._
+_TODO: concrete pain points + how to find them._
 
-## 4. Новый домен `payments` нуждается в identity поставщика и данных инвойса — как шарить без циклов и god-library?
+## 4. A new `payments` domain needs supplier identity and invoice data — how to share without cycles or a god-library?
 
-_TODO: подход к shared kernel / published API / контрактам._
+_TODO: shared kernel / published API / contract approach._

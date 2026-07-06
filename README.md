@@ -1,68 +1,68 @@
 # Supply Chain Finance — Senior Angular Take-Home
 
-Тестовое задание. Задание: `Senior-Angular-Take-Home.docx` в корне.
+Take-home submission. Original task: `Senior-Angular-Take-Home.docx` in the repo root.
 
-## Статус
+## Status
 
-| Часть | Файл(ы) | Статус |
-|-------|---------|--------|
-| Part 1 — Код фичи (Nx libs, SignalStore, feature) | `libs/` | ⏳ не сделано (запланирован отдельным этапом) |
-| Part 2 — Architecture notes | `ARCHITECTURE.md` | ⏳ каркас |
-| Part 3 — Review & refactor | `REVIEW.md`, `legacy/`, `refactor/` | ⏳ каркас |
-| Part 4 — Security | `SECURITY.md` | ⏳ каркас |
+| Part | File(s) | Status |
+|------|---------|--------|
+| Part 1 — Feature code (Nx libs, SignalStore, feature) | `libs/` | Pending (separate stage) |
+| Part 2 — Architecture notes | `ARCHITECTURE.md` | Skeleton |
+| Part 3 — Review & refactor | `REVIEW.md`, `legacy/`, `refactor/` | Skeleton |
+| Part 4 — Security | `SECURITY.md` | Skeleton |
 
-## Порядок чтения
+## Reading order
 
-Автор задания сам подсказал в разделе Submitting порядок, наиболее информативный для ревьюера:
+The task author suggests this order in the Submitting section as the most informative for a reviewer:
 
-1. **`REVIEW.md`** — Part 3, ревью legacy-компонента + два фикса в `refactor/`.
-2. **`ARCHITECTURE.md`** — Part 2, обоснования архитектурных решений.
-3. **`libs/`** — Part 1, тонкий вертикальный срез фичи *(будет добавлен)*.
-4. **`SECURITY.md`** — Part 4, короткие ответы.
+1. **`REVIEW.md`** — Part 3, legacy component review + two fixes in `refactor/`.
+2. **`ARCHITECTURE.md`** — Part 2, architectural rationale.
+3. **`libs/`** — Part 1, thin vertical slice of the feature *(to be added)*.
+4. **`SECURITY.md`** — Part 4, short answers.
 
-## Структура репозитория
+## Repository layout
 
 ```
 .
-├── README.md                        # этот файл
+├── README.md                        # this file
 ├── ARCHITECTURE.md                  # Part 2
 ├── REVIEW.md                        # Part 3
 ├── SECURITY.md                      # Part 4
-├── Senior-Angular-Take-Home.docx    # оригинальное задание
+├── Senior-Angular-Take-Home.docx    # original task
 ├── legacy/
-│   └── invoice-list.component.ts    # оригинал из задания, референс "до"
+│   └── invoice-list.component.ts    # verbatim copy from the task, "before" reference
 └── refactor/
-    └── invoice-list.component.ts    # фикс двух худших проблем (reference-quality)
+    └── invoice-list.component.ts    # fix for the two worst issues (reference-quality)
 ```
 
-## Как запустить
+## How to run
 
-Part 1 (Angular workspace) ещё не поднят, поэтому команд `npm install` / `ng serve` пока нет.
-Файлы в `refactor/` — reference-quality: они должны *читаться* как валидный Angular-код, но не запускаются как есть. Когда появится Part 1 workspace, эти файлы можно будет туда положить и запустить.
+Part 1 (Angular workspace) is not set up yet, so there are no `npm install` / `ng serve` commands.
+Files in `refactor/` are reference-quality: they should *read* as valid Angular code but are not runnable as-is. Once the Part 1 workspace exists, these files can be dropped in and executed.
 
-## Boundary setup (превью для Part 1)
+## Boundary setup (preview for Part 1)
 
-Планируемая DDD-раскладка:
+Planned DDD layout:
 
 ```
 libs/
   invoicing/
-    domain/         type:util          — типы, VO, чистая логика (ничего не импортит)
-    data-access/    type:data-access   — Apollo, SignalStore, mappers (может domain)
-    feature-list/   type:feature       — smart-контейнеры (может data-access, ui, domain)
-    ui/             type:ui            — dumb-компоненты (только domain)
+    domain/         type:util          — types, VOs, pure logic (imports nothing)
+    data-access/    type:data-access   — Apollo, SignalStore, mappers (may import domain)
+    feature-list/   type:feature       — smart containers (may import data-access, ui, domain)
+    ui/             type:ui            — dumb components (only domain)
   auth/
     data-access/    type:data-access   — current user + permissions
 ```
 
-Правила `@nx/enforce-module-boundaries`:
-- `type:ui` → только `type:util`
+`@nx/enforce-module-boundaries` rules:
+- `type:ui` → `type:util` only
 - `type:feature` → `data-access`, `ui`, `util`
 - `type:data-access` → `util`
-- `type:util` → ничего
+- `type:util` → nothing
 
 ## State ownership decision
 
-- **Инвойсы, фильтры, request-status** → `invoicing/data-access` SignalStore. Домен-локальный стейт, слепок сервер-стейта, живёт рядом с Apollo.
-- **Текущий юзер + permissions** → `auth/data-access` (отдельный SignalStore). Cross-cutting, но не global NgRx — переусложнение для одной фичи. Обоснование в `ARCHITECTURE.md`.
-- **Локальный UI-стейт (открытие dropdown и т.п.)** → `signal()` в компоненте.
+- **Invoices, filters, request status** → `invoicing/data-access` SignalStore. Domain-local state, snapshot of server state, lives next to Apollo.
+- **Current user + permissions** → `auth/data-access` (separate SignalStore). Cross-cutting, but not global NgRx — overkill for a single feature. Rationale in `ARCHITECTURE.md`.
+- **Local UI state (dropdown open, etc.)** → `signal()` in the component.

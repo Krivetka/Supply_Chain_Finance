@@ -1,23 +1,23 @@
 # Security Notes (Part 4)
 
-> Статус: **каркас**. Контент — после Parts 3 и 2.
+> Status: **skeleton**. Content after Parts 3 and 2.
 
-## 1. Где живёт access token в fintech-SPA?
+## 1. Where does the access token live in a fintech SPA?
 
-_TODO: localStorage vs in-memory vs HttpOnly cookie — trade-offs, моя позиция по refresh-токенам на фронте._
+_TODO: localStorage vs in-memory vs HttpOnly cookie — trade-offs, my stance on refresh tokens on the frontend._
 
-## 2. Angular эскейпит интерполяцию — как XSS всё равно прорывается?
+## 2. Angular escapes interpolation — how does XSS still get in?
 
-_TODO: два конкретных вектора + как каждый закрывается._
+_TODO: two concrete vectors + how each is closed._
 
-## 3. Стартовый CSP для этого приложения
+## 3. Starting CSP for this app
 
-_TODO: набросок политики, что обычно ломается при включении, как раскатывать без падения prod._
+_TODO: policy sketch, what usually breaks when it's turned on, how to roll out without taking prod down._
 
-## 4. «FE permission-check — это UX, не security»
+## 4. "Frontend permission checks are UX, not a security control"
 
-_TODO: развернуть тезис + как держать FE-чек в согласии с backend authority._
+_TODO: unpack the claim + how to keep FE checks in sync with backend authority._
 
-## 5. Два самых актуальных OWASP Top 10 для этого SPA
+## 5. Two most relevant OWASP Top 10 items for this SPA
 
-_TODO: два пункта + почему именно они._
+_TODO: two items + why they matter here._
