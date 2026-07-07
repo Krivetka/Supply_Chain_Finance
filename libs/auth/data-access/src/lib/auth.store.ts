@@ -1,5 +1,13 @@
 import { computed } from '@angular/core';
-import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withHooks,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
+import { ACME_SUPPLIER } from './auth.fixtures';
 import type { Permission } from './permissions';
 import type { User } from './user';
 
@@ -27,4 +35,9 @@ export const AuthStore = signalStore(
       patchState(store, { currentUser: null });
     },
   })),
+  withHooks({
+    onInit(store) {
+      store.signInAs(ACME_SUPPLIER);
+    },
+  }),
 );

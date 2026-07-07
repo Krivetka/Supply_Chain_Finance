@@ -30,7 +30,21 @@
 
 Every library exposes its public API through `src/index.ts` — nothing else may be imported from outside.
 
-## Boundary rules (planned tags)
+## Request-financing UI strategy — pessimistic
+
+The `requestFinancing` action in `InvoicesStore` is **pessimistic**. On click:
+
+1. `requestingId` is set to the invoice ID immediately — the button shows a spinner and becomes disabled. The invoice's `status` is **not** touched.
+2. The service call resolves.
+3. On `FinancingRequested`: status transitions `APPROVED → FINANCING_REQUESTED` and `requestingId` clears.
+4. On `FinancingError`: `lastError` is set, `requestingId` clears, status stays `APPROVED`.
+5. On network exception (`catchError`): same as error, with `lastError = 'UNKNOWN'`.
+
+**Why pessimistic:** in fintech you do not show the user "financed" until the server confirms. A speculative optimistic update that has to roll back after a rejection risks the user closing the tab, having taken a financial decision on the wrong state.
+
+**Rollback path:** trivial by construction — the invoice's status never changed speculatively, so there is nothing to undo. The only cleanup on failure is clearing `requestingId` and surfacing `lastError` to the UI (dismissible via `store.clearError()`).
+
+## Tag policy
 
 - `type:ui` → may import `type:util` only
 - `type:feature` → may import `type:data-access`, `type:ui`, `type:util`
@@ -38,7 +52,7 @@ Every library exposes its public API through `src/index.ts` — nothing else may
 - `type:util` → imports nothing
 - `scope:invoicing` and `scope:auth` may import `scope:shared`, never each other directly
 
-`shared/kernel` is `type:util`, `scope:shared`. `invoicing/*` and `auth/data-access` carry their own scope tags. Enforced via `@nx/enforce-module-boundaries` (or the equivalent ESLint rule set) in a real workspace; here the rules are documented and honoured by convention.
+`shared/kernel` is `type:util`, `scope:shared`. `invoicing/*` and `auth/data-access` carry their own scope tags. Enforced via `@nx/enforce-module-boundaries` (or the equivalent ESLint rule set) in a real workspace; here the rules are documented and applied by convention through the `tsconfig` path aliases and `index.ts` barrels.
 
 ## How to run
 
