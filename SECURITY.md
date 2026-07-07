@@ -34,10 +34,14 @@ form-action 'self';
 base-uri 'self';
 object-src 'none';
 upgrade-insecure-requests;
+require-trusted-types-for 'script';
+trusted-types default angular angular#bundler;
 report-to csp-endpoint;
 ```
 
 The core commitments: no `'unsafe-inline'`, no `'unsafe-eval'`, per-request nonce for the small amount of inline script/style Angular still emits, `strict-dynamic` so the app's module loader keeps working, and `connect-src` narrowed to the actual API host.
+
+**Trusted Types (defence in depth).** `require-trusted-types-for 'script'` tells the browser to reject any raw string assigned to a DOM sink (`innerHTML`, `script.src`, `document.write`, `eval`) — the assignment throws a `TypeError` instead of executing. Values must come out of a named policy declared in `trusted-types`; Angular registers its `angular` and `angular#bundler` policies automatically and covers its own template bindings. Where a regular sanitizer can be silenced by `bypassSecurityTrust*`, Trusted Types can't — the sink itself refuses the string. Cost: any third-party library that writes to `innerHTML` directly (older editors, legacy jQuery, some chart libs) will break the first time it runs. Fix path is the same as CSP rollout — start Report-Only, catch violations in staging, wrap or replace offending sinks, then flip to enforcing.
 
 **What usually breaks:**
 - Angular attribute bindings that emit inline `style="…"` — need the nonce (Angular CLI 16+ supports this) or a tightly scoped `unsafe-hashes`.
