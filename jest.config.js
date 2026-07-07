@@ -1,9 +1,8 @@
-import type { Config } from 'jest';
-
-const config: Config = {
+/** @type {import('jest').Config} */
+module.exports = {
   preset: 'jest-preset-angular',
   testEnvironment: 'jsdom',
-  setupFilesAfterEach: ['<rootDir>/jest.setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   moduleNameMapper: {
     '^@scf/shared/kernel$': '<rootDir>/libs/shared/kernel/src/index.ts',
     '^@scf/invoicing/domain$': '<rootDir>/libs/invoicing/domain/src/index.ts',
@@ -13,9 +12,4 @@ const config: Config = {
     '^@scf/auth/data-access$': '<rootDir>/libs/auth/data-access/src/index.ts',
   },
   testMatch: ['<rootDir>/tests/**/*.spec.ts'],
-  transform: {
-    '^.+\\.ts$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }],
-  },
 };
-
-export default config;
