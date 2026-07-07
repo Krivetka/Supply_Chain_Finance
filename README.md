@@ -21,8 +21,10 @@
 │   └── auth/data-access/            # current user + permissions
 ├── tests/                           # Jest specs
 ├── tsconfig.base.json               # path aliases + strict flags
-├── tsconfig.json
-├── jest.config.ts
+├── tsconfig.json                    # includes libs/ apps/ tests/
+├── tsconfig.spec.json               # inherits base, used by ts-jest
+├── jest.config.js
+├── jest.setup.ts                    # zoneless test env
 └── package.json
 ```
 
@@ -39,4 +41,45 @@ Every library exposes its public API through `src/index.ts` — nothing else may
 `shared/kernel` is `type:util`, `scope:shared`. `invoicing/*` and `auth/data-access` carry their own scope tags. Enforced via `@nx/enforce-module-boundaries` (or the equivalent ESLint rule set) in a real workspace; here the rules are documented and honoured by convention.
 
 ## How to run
+
+Prerequisites: Node.js 20+ (developed on 24.2) and npm 10+.
+
+### First-time setup
+
+```bash
+npm install
+```
+
+Installs Angular 20, `@ngrx/signals` 20, Jest, ts-jest, and the `jest-preset-angular` preset. Roughly 380 packages, one minute on a warm cache.
+
+### Type-check the whole workspace
+
+```bash
+npm run typecheck
+```
+
+Runs `tsc --noEmit` against `tsconfig.json`, which walks every file in `libs/`, `apps/`, and `tests/` under strict flags (`strict`, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noImplicitAny`). Exit code 0 means the type-level invariants — including "`requestFinancing` refuses anything that isn't `EligibleInvoice`" and the exhaustive `switch` over `RequestFinancingResult` — all hold.
+
+### Run tests
+
+```bash
+npm test
+```
+
+Runs the Jest suite once. Two files, nine tests, roughly fifteen seconds cold:
+
+- `tests/eligibility.spec.ts` — five cases on the pure `canRequestFinancing` predicate (happy path + each of the four rejection paths in isolation).
+- `tests/invoices.store.spec.ts` — four cases on `InvoicesStore` transitions (initial state, `load`, `setFilter`, and the `APPROVED → FINANCING_REQUESTED` transition after a successful `requestFinancing`).
+
+### Watch mode
+
+```bash
+npm run test:watch
+```
+
+Interactive Jest with re-run on save. Useful when iterating on `eligibility.ts` or the store.
+
+### No dev server on purpose
+
+There is no `npm start` / `ng serve`. Wiring an Angular CLI workspace (`angular.json`, `@angular-devkit/build-angular`) or a Vite-based bundler is a half-hour of ceremony that this take-home explicitly waives — "we're reading the structure of your code, not running a server". Type-checking and tests cover the correctness surface that a running app would.
 
